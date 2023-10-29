@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:registration_test/config/router/app_router.dart';
 import 'package:registration_test/config/themes/theme_colors.dart';
+import 'package:registration_test/config/themes/theme_text_style.dart';
 import 'package:registration_test/core/core_bloc/core_blocs.dart';
 import 'package:registration_test/features/presentation/blocs/login_bloc/login_bloc.dart';
 import 'package:registration_test/features/presentation/widgets/appbars.dart';
@@ -38,7 +39,32 @@ class _LoginScreenState extends State<LoginScreen> {
       child: BlocConsumer<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is LoginFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage)));
+            showCupertinoDialog(
+              context: context,
+              builder: (context) => CupertinoAlertDialog(
+                title: Text("Attention",
+                    style: ThemeTextManropeMedium.cmSize.copyWith(
+                      fontSize: 16,
+                      color: ThemeColors.black,
+                    )),
+                content: Text(
+                  state.errorMessage,
+                  style: ThemeTextManropeRegular.cmSize.copyWith(
+                    fontSize: 14,
+                    color: ThemeColors.black,
+                  ),
+                ),
+                actions: [
+                  CupertinoDialogAction(
+                    isDefaultAction: true,
+                    child: const Text('Close'),
+                    onPressed: () {
+                      AutoRouter.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+            );
           } else if (state is LoginLoaded) {
             AutoRouter.of(context).popAndPush(MainShellRoute(
               userData: state.data,
