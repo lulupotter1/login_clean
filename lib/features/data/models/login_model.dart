@@ -1,55 +1,30 @@
+import 'package:json_annotation/json_annotation.dart';
+import 'package:registration_test/core/usecases/data_mapper.dart';
+import 'package:registration_test/features/data/models/token_model.dart';
+import 'package:registration_test/features/data/models/user_model.dart';
 import 'package:registration_test/features/domain/entities/login_entities.dart';
 
-class LoginModel extends LoginEntity {
-  const LoginModel({
-    required UserModel userData,
-    required TokenModel tokenData,
-  }) : super(
-          userData: userData,
-          tokenData: tokenData,
-        );
+part 'login_model.g.dart';
 
-  factory LoginModel.fromJson(Map<String, dynamic> map) {
-    return LoginModel(
-      userData: UserModel.fromJson(map['user'] as Map<String, dynamic>),
-      tokenData: TokenModel.fromJson(map['tokens'] as Map<String, dynamic>),
-    );
-  }
-}
+@JsonSerializable()
+class LoginModel extends DataMapper<LoginEntity> {
+  @JsonKey(name: "user")
+  final UserModel userData;
 
-class UserModel extends UserEntity {
-  const UserModel({
-    required int id,
-    String? email,
-    String? nickname,
-  }) : super(
-          id: id,
-          email: email,
-          nickname: nickname,
-        );
+  @JsonKey(name: "tokens")
+  final TokenModel tokenData;
+  LoginModel({
+    required this.tokenData,
+    required this.userData,
+  });
 
-  factory UserModel.fromJson(Map<String, dynamic> map) {
-    return UserModel(
-      id: map['id'],
-      email: map['email'],
-      nickname: map['nickname'],
-    );
-  }
-}
+  factory LoginModel.fromJson(Map<String, dynamic> map) => _$LoginModelFromJson(map);
 
-class TokenModel extends TokenEntity {
-  const TokenModel({
-    required String accessToken,
-    required String refreshToken,
-  }) : super(
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-        );
-
-  factory TokenModel.fromJson(Map<String, dynamic> map) {
-    return TokenModel(
-      accessToken: map['accessToken'],
-      refreshToken: map['refreshToken'],
+  @override
+  LoginEntity mapToEntity() {
+    return LoginEntity(
+      userData: userData.mapToEntity(),
+      tokenData: tokenData.mapToEntity(),
     );
   }
 }

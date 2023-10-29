@@ -1,4 +1,6 @@
-class LoginEntity {
+import 'package:equatable/equatable.dart';
+
+class LoginEntity extends Equatable {
   final UserEntity? userData;
   final TokenEntity? tokenData;
 
@@ -6,9 +8,15 @@ class LoginEntity {
     this.userData,
     this.tokenData,
   });
+
+  @override
+  List<Object?> get props => [
+        userData,
+        tokenData,
+      ];
 }
 
-class UserEntity {
+class UserEntity extends Equatable {
   final int id;
   final String? email;
   final String? nickname;
@@ -18,9 +26,16 @@ class UserEntity {
     this.nickname,
     required this.id,
   });
+
+  @override
+  List<Object?> get props => [
+        id,
+        email,
+        nickname,
+      ];
 }
 
-class TokenEntity {
+class TokenEntity extends Equatable {
   final String accessToken;
   final String refreshToken;
 
@@ -28,4 +43,10 @@ class TokenEntity {
     required this.accessToken,
     required this.refreshToken,
   });
+
+  @override
+  List<Object?> get props => [
+        accessToken,
+        refreshToken,
+      ];
 }
